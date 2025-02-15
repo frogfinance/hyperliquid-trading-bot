@@ -1,5 +1,7 @@
 # Hyperliquid Trading Bot
 
+This project is a fork of the [Hyperliquid-Trading-Bot](https://github.com/Sakaar-Sen/Hyperliquid-Trading-Bot/) 
+
 This bot is designed to automate and streamline your trading experience on Hyperliquid(a decentralized perpetuals exchange) offering both manual and automated trading capabilities.
 
 # Features
