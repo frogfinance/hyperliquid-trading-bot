@@ -11,6 +11,8 @@ import logging
 from hyperliquid.exchange import Exchange
 from hyperliquid.info import Info
 
+from src import config
+
 
 def decrypt_secret_key(encrypted_data: str, password: str) -> str:
     data = json.loads(encrypted_data)
@@ -33,8 +35,8 @@ def decrypt_secret_key(encrypted_data: str, password: str) -> str:
     return decrypted_key.decode()
 
 
-def setup(base_url=None, skip_ws=False, password=None):
-    secret_key = os.getenv('SECRET_KEY')
+def setup(base_url=None, skip_ws=False, encrypted_key=None):
+    secret_key = encrypted_key
     
     account: LocalAccount = eth_account.Account.from_key(secret_key)
     
