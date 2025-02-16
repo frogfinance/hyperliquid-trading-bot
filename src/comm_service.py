@@ -8,14 +8,20 @@ from src import config
 import json
 import logging
 
+from src.discord_user_service import DiscordUser, DiscordUserService
+from src.wallet_manager import WalletManager
+
 
 class CommunicationService(discord.Client):
     def __init__(self, hlbot : Optional[HyperLiquidExecutionService], screener : Screener, *args, **kwargs):
         i = discord.Intents.all()
         super().__init__(intents=i)
         self.screener : Screener = screener
+        self.user_service : DiscordUserService = DiscordUserService()
+        self.wallet_manager : WalletManager = WalletManager()
         self.hlbot : Optional[HyperLiquidExecutionService] = hlbot
-        
+        self.user_bot_map = {}
+
         logging.info("Comms loaded.")
         
         
@@ -50,15 +56,16 @@ class CommunicationService(discord.Client):
         return msg
     
     
-    def create_hlbot(self, password):
+    def create_hlbot(self, private_key: str):
         try:
-            hlbot = HyperLiquidExecutionService(password)
+            hlbot = HyperLiquidExecutionService(private_key)
             self.hlbot = hlbot
             self.screener.hyperliquidBot = hlbot
             return hlbot.address
         except:
             return False
     
+
     async def on_message(self, message : discord.Message):
         if message.author == self.user:
             return
@@ -71,7 +78,17 @@ class CommunicationService(discord.Client):
                 return
             
             password = args[1]
-            res = self.create_hlbot(password)
+            author = message.author
+            if self.user_service.check_if_user_exists(author.id, message.channel.id):
+                await message.channel.send("Bot already started")
+                return
+            else:
+                user = self.user_service.create_user(author.id, message.channel.id, password)
+                address, encrypted_key_json = self.wallet_manager.create_user_wallet(user)
+                private_key = self.wallet_manager.get_private_key(user, encrypted_key_json)
+            
+            res = self.create_hlbot(private_key)
+
             if res:
                 await message.channel.send(f"running with account {res}")
             else:
