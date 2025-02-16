@@ -9,18 +9,16 @@ from discord import SyncWebhook
 from src import config
 import logging
 
-
+# assets on hyperliquid that have a k in front of them
 specialAssets = ["PEPE", "SHIB", "FLOKI", "BONK"]
 
 class HyperLiquidExecutionService:
-    def __init__(self, password):
-        self.address, self.info, self.exchange = example_utils.setup(constants.MAINNET_API_URL, skip_ws=True, password=password)
+    def __init__(self, eth_key: str):
+        self.address, self.info, self.exchange = example_utils.setup(constants.MAINNET_API_URL, skip_ws=True, encrypted_key=eth_key)
         
         self.ex = ccxt.hyperliquid({
-            'apiKey': self.address,
-            'secret': self.info.api_secret(self.address),
+            'privateKey': eth_key,
             'walletAddress': self.address,
-
         })
         
         webhookUrl = config.DISCORD_WEBHOOK
