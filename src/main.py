@@ -11,7 +11,8 @@ async def main():
     logging.info("Starting bot application")
     screener = Screener()
     discordBot = CommunicationService(None, screener)
-
+    # The HyperLiquid Bot has not been initiated yet.   
+    # When the bot is called from the discord channel, the HyperLiquid Bot will be initiated for that user.
     token = config.DISCORD_TOKEN
     await discordBot.start(token)
         
