@@ -17,7 +17,13 @@ pandas = "^2.2.3"
 numpy = "^2.2.3"
 pandas-ta = "^0.3.14b0"
 python-dotenv = "^1.0.1"
+bcrypt = "^4.2.1"
 
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.4"
+factory-boy = "^3.3.3"
+faker = "^36.1.1"
 
 [build-system]
 requires = ["poetry-core"]

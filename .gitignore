@@ -3,3 +3,7 @@
 __pycache__
 *.pyc
 excluded.txt
+Makefile
+ethereum-data/
+empty_password.txt
+dbs/*.db
